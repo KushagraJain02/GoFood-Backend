@@ -10,7 +10,7 @@ mongoDB();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://gofood-frontend-pi.vercel.app" // ✅ Your deployed frontend
+  "https://gofood-frontend-pi.vercel.app", // ✅ Your deployed frontend
 ];
 
 // ✅ Use CORS middleware
@@ -34,7 +34,4 @@ app.get("/", (req, res) => {
   res.send("Hello World!-----");
 });
 
-// ✅ Start server
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+module.exports = app;

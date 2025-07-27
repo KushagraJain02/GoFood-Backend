@@ -1,22 +1,38 @@
-// api/index.js
 const express = require("express");
-const serverless = require("serverless-http");
 const cors = require("cors");
-const mongoDB = require("../db"); // adjust if needed
+const app = express();
+const port = 5000;
+const mongoDB = require("./db");
 require("dotenv").config();
 
+// Connect to MongoDB
 mongoDB();
-const app = express();
 
-app.use(cors({ origin: "*", credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://gofood-frontend-pi.vercel.app", // ✅ Your deployed frontend
+];
+
+// ✅ Use CORS middleware
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
+// ✅ Parse JSON bodies
 app.use(express.json());
 
-app.use("/api", require("../Routes/CreateUser"));
-app.use("/api", require("../Routes/DisplayData"));
-app.use("/api", require("../Routes/OrderData"));
+// ✅ Define routes
+app.use("/api", require("./Routes/CreateUser"));
+app.use("/api", require("./Routes/DisplayData"));
+app.use("/api", require("./Routes/OrderData"));
 
+// ✅ Root test route
 app.get("/", (req, res) => {
-  res.send("API is running on Vercel!");
+  res.send("Hello World!-----");
 });
 
+module.exports = app;
 module.exports.handler = serverless(app);
