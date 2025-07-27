@@ -8,10 +8,15 @@ require("dotenv").config();
 // Connect to MongoDB
 mongoDB();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://gofood-frontend-pi.vercel.app" // ✅ Your deployed frontend
+];
+
 // ✅ Use CORS middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   })
 );
