@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const mongoURI =
-  "mongodb+srv://gofood:gofood%4002@cluster0.oewve2q.mongodb.net/gofoodmern?retryWrites=true&w=majority&appName=Cluster0";
+// const mongoURI =
+//   "mongodb+srv://gofood:gofood%4002@cluster0.oewve2q.mongodb.net/gofoodmern?retryWrites=true&w=majority&appName=Cluster0";
 const mongoDB = async () => {
   try {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ Connected to MongoDB");
 
     const fetched_Data = await mongoose.connection.db

@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const port = 5000;
 const mongoDB = require("./db");
+require("dotenv").config();
 
 // Connect to MongoDB
 mongoDB();
