@@ -2,7 +2,7 @@
 
 **GoFood** is a full-stack online food ordering application built with the **MERN stack** (MongoDB, Express, React, Node.js). It allows users to browse, search, and order food items, with a modern, responsive, and elegant UI.  
 
-**🌐 Live Demo:** [https://your-frontend-domain.com]((https://go-food-frontend-zeta.vercel.app/))
+**🌐 Live Demo:** [[https://your-frontend-domain.com]((https://go-food-frontend-zeta.vercel.app/))](https://go-food-frontend-zeta.vercel.app/)
 
 ---
 
