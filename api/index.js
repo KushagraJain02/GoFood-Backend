@@ -12,14 +12,17 @@ mongoDB();
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://gofood-frontend-pi.vercel.app",
+  "http://localhost:5173", // local frontend only
 ];
 
-// CORS middleware
+// ✅ CORS middleware
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow non-browser requests
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );

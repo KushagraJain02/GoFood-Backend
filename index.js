@@ -11,10 +11,9 @@ mongoDB();
 // ✅ Port configuration
 const port = process.env.PORT || 5000;
 
-// ✅ Allowed origins for CORS
+// ✅ Allowed origins for CORS (only local frontend now)
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
-  process.env.FRONTEND_URL || "https://gofood-frontend-pi.vercel.app", // deployed frontend
 ];
 
 // ✅ CORS middleware
