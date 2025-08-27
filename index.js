@@ -1,37 +1,56 @@
+// index.js
 const express = require("express");
 const cors = require("cors");
-const app = express();
-const port = 5000;
-const mongoDB = require("./db");
 require("dotenv").config();
+const mongoDB = require("./db"); // MongoDB connection
+const app = express();
 
-// Connect to MongoDB
+// ✅ Connect to MongoDB
 mongoDB();
 
+// ✅ Port configuration
+const port = process.env.PORT || 5000;
+
+// ✅ Allowed origins for CORS
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://gofood-frontend-pi.vercel.app", // ✅ Your deployed frontend
+  "http://localhost:5173", // local frontend
+  process.env.FRONTEND_URL || "https://gofood-frontend-pi.vercel.app", // deployed frontend
 ];
 
-// ✅ Use CORS middleware
+// ✅ CORS middleware
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
 
-// ✅ Parse JSON bodies
+// ✅ Handle preflight requests safely
+app.options("/api/*", cors());
+
+// ✅ Parse JSON request bodies
 app.use(express.json());
 
-// ✅ Define routes
+// ✅ API routes
 app.use("/api", require("./Routes/CreateUser"));
 app.use("/api", require("./Routes/DisplayData"));
 app.use("/api", require("./Routes/OrderData"));
 
 // ✅ Root test route
 app.get("/", (req, res) => {
-  res.send("Hello World!-----");
+  res.send("Backend is running!");
 });
+
+// ✅ Start server (only if running locally)
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
 
 module.exports = app;
