@@ -8,20 +8,17 @@ const app = express();
 // ✅ Connect to MongoDB
 mongoDB();
 
-// ✅ Port configuration
-const port = process.env.PORT || 5000;
+// ✅ Backend port
+const PORT = process.env.PORT || 5000;
 
-// ✅ Allowed origins for CORS (only local frontend now)
-const allowedOrigins = [
-  "http://localhost:5173", // local frontend
-];
+// ✅ Allowed origins for CORS (local frontend only)
+const allowedOrigins = ["http://localhost:5173"];
 
 // ✅ CORS middleware
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman, curl, server-to-server)
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // allow Postman/curl
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
@@ -29,13 +26,10 @@ app.use(
   })
 );
 
-// ✅ Handle preflight requests safely
-app.options("/api/*", cors());
-
-// ✅ Parse JSON request bodies
+// ✅ Parse JSON bodies
 app.use(express.json());
 
-// ✅ API routes
+// ✅ API routes (all relative paths, never use full URLs)
 app.use("/api", require("./Routes/CreateUser"));
 app.use("/api", require("./Routes/DisplayData"));
 app.use("/api", require("./Routes/OrderData"));
@@ -45,11 +39,12 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-// ✅ Start server (only if running locally)
+// ✅ Local server (only runs when executing node index.js)
 if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 }
 
+// ✅ Export app for deployment (Render / serverless platforms)
 module.exports = app;
