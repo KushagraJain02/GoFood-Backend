@@ -1,50 +1,42 @@
-// index.js
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const mongoDB = require("./db"); // MongoDB connection
 const app = express();
 
-// ✅ Connect to MongoDB
+// Connect to MongoDB
 mongoDB();
 
-// ✅ Backend port
+// Backend port
 const PORT = process.env.PORT || 5000;
 
-// ✅ Allowed origins for CORS (local frontend only)
-const allowedOrigins = ["http://localhost:5173"];
-
-// ✅ CORS middleware
+// CORS middleware - allow all origins
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow Postman/curl
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: true, // allow requests from any origin
     credentials: true,
   })
 );
 
-// ✅ Parse JSON bodies
+// Parse JSON bodies
 app.use(express.json());
 
-// ✅ API routes (all relative paths, never use full URLs)
+// API routes
 app.use("/api", require("./Routes/CreateUser"));
 app.use("/api", require("./Routes/DisplayData"));
 app.use("/api", require("./Routes/OrderData"));
 
-// ✅ Root test route
+// Root test route
 app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-// ✅ Local server (only runs when executing node index.js)
+// Local server
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
 
-// ✅ Export app for deployment (Render / serverless platforms)
+// Export app for deployment (Render / serverless platforms)
 module.exports = app;
